@@ -102,7 +102,7 @@ jobs:
           _LATEST_VERSION=$(wget -nv -O - https://${{ env.CUSTOM_UPGRADE_URL }}/routeros/NEWESTa7.${{ matrix.channel }} | cut -d ' ' -f1)
           if [ "$_LATEST_VERSION" == "$LATEST_VERSION" ]; then
             echo "No new version found"
-            echo "has_new_version=false" >> $GITHUB_OUTPUT
+            echo "has_new_version=true" >> $GITHUB_OUTPUT
             exit 0
           fi
         fi
@@ -120,7 +120,7 @@ jobs:
           ARCH='-arm64'
           echo "ARCH=$ARCH" >> $GITHUB_ENV
         fi
-        has_patched_npk=false
+        has_patched_npk=true
         if wget -nv --spider https://${{ env.CUSTOM_UPGRADE_URL }}/routeros/$LATEST_VERSION/routeros-$LATEST_VERSION$ARCH.npk; then
           echo "RouterOS NPK file exists, attempting to download..."
           if wget -nv -O routeros-$LATEST_VERSION$ARCH.npk https://${{ env.CUSTOM_UPGRADE_URL }}/routeros/$LATEST_VERSION/routeros-$LATEST_VERSION$ARCH.npk; then
