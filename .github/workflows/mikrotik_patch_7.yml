@@ -98,6 +98,9 @@ jobs:
           LATEST_VERSION=$(wget -nv -O - https://${{ env.MIKRO_UPGRADE_URL }}/routeros/NEWESTa7.${{ matrix.channel }} | cut -d ' ' -f1)
         fi
         echo Latest Version:$LATEST_VERSION
+        echo "has_new_version=true" >> $GITHUB_OUTPUT
+        echo "has_patched_npk=true" >> $GITHUB_OUTPUT
+        exit 0
         if [ "${{ github.event_name }}" == "schedule" ]; then
           _LATEST_VERSION=$(wget -nv -O - https://${{ env.CUSTOM_UPGRADE_URL }}/routeros/NEWESTa7.${{ matrix.channel }} | cut -d ' ' -f1)
           if [ "$_LATEST_VERSION" == "$LATEST_VERSION" ]; then
