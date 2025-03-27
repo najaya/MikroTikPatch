@@ -98,17 +98,15 @@ jobs:
           LATEST_VERSION=$(wget -nv -O - https://${{ env.MIKRO_UPGRADE_URL }}/routeros/NEWESTa7.${{ matrix.channel }} | cut -d ' ' -f1)
         fi
         echo Latest Version:$LATEST_VERSION
-        echo "has_new_version=true" >> $GITHUB_OUTPUT
-        echo "has_patched_npk=true" >> $GITHUB_OUTPUT
-        exit 0
-        if [ "${{ github.event_name }}" == "schedule" ]; then
-          _LATEST_VERSION=$(wget -nv -O - https://${{ env.CUSTOM_UPGRADE_URL }}/routeros/NEWESTa7.${{ matrix.channel }} | cut -d ' ' -f1)
-          if [ "$_LATEST_VERSION" == "$LATEST_VERSION" ]; then
-            echo "No new version found"
-            echo "has_new_version=true" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-        fi
+        
+        # if [ "${{ github.event_name }}" == "schedule" ]; then
+        #   _LATEST_VERSION=$(wget -nv -O - https://${{ env.CUSTOM_UPGRADE_URL }}/routeros/NEWESTa7.${{ matrix.channel }} | cut -d ' ' -f1)
+        #   if [ "$_LATEST_VERSION" == "$LATEST_VERSION" ]; then
+        #     echo "No new version found"
+        #     echo "has_new_version=true" >> $GITHUB_OUTPUT
+        #     exit 0
+        #   fi
+        # fi
         echo "has_new_version=true" >> $GITHUB_OUTPUT
         BUILD_TIME=${{ needs.Set_BuildTime.outputs.BUILD_TIME }}
         echo Build Time:$BUILD_TIME
@@ -123,6 +121,9 @@ jobs:
           ARCH='-arm64'
           echo "ARCH=$ARCH" >> $GITHUB_ENV
         fi
+        echo "has_new_version=true" >> $GITHUB_OUTPUT
+        echo "has_patched_npk=true" >> $GITHUB_OUTPUT
+        exit 0
         has_patched_npk=false
         if wget -nv --spider https://${{ env.CUSTOM_UPGRADE_URL }}/routeros/$LATEST_VERSION/routeros-$LATEST_VERSION$ARCH.npk; then
           echo "RouterOS NPK file exists, attempting to download..."
